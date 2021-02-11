@@ -1,0 +1,67 @@
+version: "3.7"
+
+services:
+  bot:
+    container_name: kgbtrbot-telegram
+    image: node:15-alpine
+    volumes:
+      - ./src/:/app/src
+      - ./node_modules/:/app/node_modules
+      - ./package.json:/app/package.json
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./nodemon.json:/app/nodemon.json
+    working_dir: /app
+    env_file: .env
+    networks:
+      - net
+    # expose:
+    #   - 4000
+    # ports:
+    #   - 4000:4000
+    command:
+      - yarn
+      - dev
+
+  bot-build:
+    container_name: kgbtrbot-telegram-build
+    image: node:15-alpine
+    volumes:
+      - ./src/:/app/src
+      - ./dist/:/app/dist
+      - ./node_modules/:/app/node_modules
+      - ./package.json:/app/package.json
+      - ./tsconfig.json:/app/tsconfig.json
+    working_dir: /app
+    env_file: .env
+    networks:
+      - net
+    command:
+      - yarn
+      - build
+
+  bot-prod:
+    container_name: kgbtrbot-telegram-prod
+    image: node:15-alpine
+    volumes:
+      - ./dist/:/app/dist
+      - ./node_modules/:/app/node_modules
+      - ./package.json:/app/package.json
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./nodemon.json:/app/nodemon.json
+    working_dir: /app
+    env_file: .env
+    networks:
+      - net
+    # expose:
+    #   - 4000
+    # ports:
+    #   - 4000:4000
+    # command: /bin/sh -c "while sleep 1000; do :; done"
+    command:
+      - node
+      - index.js
+
+networks:
+  net:
+    driver: bridge
+    name: bot_net

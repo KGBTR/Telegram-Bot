@@ -1,0 +1,11 @@
+{
+  "watch": ["dist"],
+  "ext": "ts,js",
+  "legacyWatch": true,
+  "ignore": ["node_modules"],
+  "exec": "node dist/",
+  "execMap": {
+    "ts": "ts-node",
+    "js": "node"
+  }
+}
